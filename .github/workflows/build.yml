@@ -1,34 +1,42 @@
-name: Unreal Engine Build
+name: Build Unreal Engine 5
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Unreal Engine
-        uses: Unreal-Actions/setup-ue@v1
+      - name: Build Unreal Engine 5 Project
+        uses: Fork-on-the-Table-Collective/UE5-build-action@v1
         with:
-          version: 5.3.2
-
-      - name: Build Unreal Project
-        run: |
-          BuildProject.bat BOAGameJam2024.uproject -platform=Win64 -configuration=Development -build
-        shell: cmd
-
-      - name: Upload Artifacts (optional)
-        uses: actions/upload-artifact@v3
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-        with:
-          name: UnrealProjectBuild
-          path: BOAGameJam2024.uproject
+          enginePath: 'C:\Program Files\Epic Games\UE_5.3'
+          uprojectPath: BOAGameJam2024.uproject'
+          buildConfig: 'Shipping'
+          platform: 'Win64'
+          clean: 'true'
+          cook: 'true'
+          compressed: 'true'
+          UpdateIfNeeded: 'true'
+          stage: 'true'
+          package: 'false'
+          pak: 'false'
+          server: 'false'
+          archive: 'false'
+          archivePath: 'path/to/archive'
+          nullrhi: 'false'
+          editor: 'true'
+          encryptIniFiles: 'false'
+          release: '1.0.0'
+          patch: '1.0.1'
+          maps: 'Map1,Map2'
+          deletePDB: 'false'
+          anticheatEnabled: 'true'
+          anticheatPrivateKey: 'base64-private-key'
+          anticheatPublicCert: 'base64-public-cert'
