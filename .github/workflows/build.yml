@@ -1,0 +1,34 @@
+name: Unreal Engine Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Unreal Engine
+        uses: Unreal-Actions/setup-ue@v1
+        with:
+          version: 5.3.2
+
+      - name: Build Unreal Project
+        run: |
+          BuildProject.bat BOAGameJam2024.uproject -platform=Win64 -configuration=Development -build
+        shell: cmd
+
+      - name: Upload Artifacts (optional)
+        uses: actions/upload-artifact@v3
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        with:
+          name: UnrealProjectBuild
+          path: BOAGameJam2024.uproject
